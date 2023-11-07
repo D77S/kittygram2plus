@@ -149,9 +149,14 @@ REST_FRAMEWORK = {
         'anon': '1000/day',  # Лимит для AnonRateThrottle
         # Имена (ключи) для scope придумывает разработчик,
         # в меру собственной фантазии
-        'low_request': '1/minute',
+        'low_request': '10/second',
+    },
+    'DEFAULT_PAGINATION_CLASS': ('rest_framework.pagination.' +
+                                 'PageNumberPagination'),
+    'PAGE_SIZE': 3,
+    #  'DEFAULT_PAGINATION_CLASS': ('rest_framework.pagination.' +
+    #                               'LimitOffsetPagination'),
     }
-}
 
 SIMPLE_JWT = {
    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
