@@ -1,9 +1,10 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 #  from rest_framework.throttling import AnonRateThrottle
 from rest_framework.throttling import ScopedRateThrottle
 #  from rest_framework.pagination import PageNumberPagination
 #  from rest_framework.pagination import LimitOffsetPagination
-from .pagination import CatsPagination
+#  from .pagination import CatsPagination
 
 from .models import Achievement, Cat, User
 from .serializers import AchievementSerializer, CatSerializer, UserSerializer
@@ -22,9 +23,17 @@ class CatViewSet(viewsets.ModelViewSet):
     # А далее применится лимит low_request
     # Для любых пользователей установим кастомный лимит 1 запрос в минуту
     throttle_scope = 'low_request'
-    pagination_class = CatsPagination
+    #  pagination_class = CatsPagination
     #  pagination_class = PageNumberPagination
     #  pagination_class = LimitOffsetPagination
+    # Указываем фильтрующий бэкенд DjangoFilterBackend
+    # Из библиотеки django-filter
+    filter_backends = (DjangoFilterBackend,)
+    # Временно отключим пагинацию на уровне вьюсета,
+    # так будет удобнее настраивать фильтрацию
+    pagination_class = None
+    # Фильтровать будем по полям color и birth_year модели Cat
+    filterset_fields = ('color', 'birth_year')
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
